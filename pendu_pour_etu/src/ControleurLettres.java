@@ -45,10 +45,10 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
 
         if (this.modelePendu.gagne()) {
             this.vuePendu.getChrono().stop();
-            this.vuePendu.popUpMessageGagne();
+            this.vuePendu.popUpMessageGagne().showAndWait();;
         } else if (this.modelePendu.perdu()) {
             this.vuePendu.getChrono().stop();
-            this.vuePendu.popUpMessagePerdu();
+            this.vuePendu.popUpMessagePerdu().showAndWait();;
         }
     }
 }

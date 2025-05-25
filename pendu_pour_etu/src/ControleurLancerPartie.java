@@ -22,6 +22,8 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
      */
     public ControleurLancerPartie(MotMystere modelePendu, Pendu vuePendu) {
         // A implémenter
+        this.modelePendu = modelePendu;
+        this.vuePendu = vuePendu;
     }
 
     /**
