@@ -8,6 +8,13 @@
         "/home/Zakaria/Documents/Ihm/javafx-sdk-17.0.15/lib/javafx.media.jar",
         "/home/Zakaria/Documents/Ihm/javafx-sdk-17.0.15/lib/javafx.swing.jar",
         "/home/Zakaria/Documents/Ihm/javafx-sdk-17.0.15/lib/javafx.web.jar",
-        "/home/Zakaria/Documents/Ihm/javafx-sdk-17.0.15/lib/javafx-swt.jar"
+        "/home/Zakaria/Documents/Ihm/javafx-sdk-17.0.15/lib/javafx-swt.jar",
+        "/usr/share/openjfx/lib/javafx.base.jar",
+        "/usr/share/openjfx/lib/javafx.controls.jar",
+        "/usr/share/openjfx/lib/javafx.fxml.jar",
+        "/usr/share/openjfx/lib/javafx.graphics.jar",
+        "/usr/share/openjfx/lib/javafx.media.jar",
+        "/usr/share/openjfx/lib/javafx.swing.jar",
+        "/usr/share/openjfx/lib/javafx.web.jar"
     ]
 }

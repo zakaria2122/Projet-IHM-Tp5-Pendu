@@ -31,6 +31,11 @@ public class Chronometre extends Text{
      */
     public Chronometre(){
         // A implémenter
+
+        this.timeline =timeline;
+        this.keyFrame = keyFrame;
+        this.actionTemps = actionTemps;
+         
     }
 
     /**
