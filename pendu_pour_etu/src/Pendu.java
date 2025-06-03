@@ -129,25 +129,31 @@ private Pane titre() {
     titre.setTextFill(Color.DARKBLUE);
     titre.setAlignment(Pos.TOP_LEFT);
     titre.setPrefWidth(800);
-    StackPane banniere = new StackPane(titre);
+    HBox ensembleBouton = new HBox();
+    BorderPane banniere = new BorderPane();
     banniere.setPadding(new Insets(20));
     banniere.setStyle("-fx-background-color: lightgray;");
 
     // Initialisation du bouton Paramètres
-    Image imgParam = new Image(getClass().getResource("/img/parametres.png").toExternalForm());
-    ImageView parImageView = new ImageView(imgParam);
-    parImageView.setFitWidth(30);
-    parImageView.setFitHeight(30);
+    ImageView imgParam = new ImageView(new Image("file:/home/iut45/Etudiants/o22403771/Documents/2emeSemestres/IHM/Projet-IHM-Tp5-Pendu/pendu_pour_etu/img/parametres.png"));
+
+   imgParam.setFitWidth(30);
+   imgParam.setFitHeight(30);
     this.boutonParametres = new Button();
-    this.boutonParametres.setGraphic(parImageView);
+    this.boutonParametres.setGraphic(imgParam);
 
     // Initialisation du bouton Maison
-    Image imgMaison = new Image(getClass().getResource("/img/maison.png").toExternalForm());
-    ImageView maisonImageView = new ImageView(imgMaison);
+
+    ImageView maisonImageView = new ImageView(new Image("file:pendu_pour_etu/img/home.png"));
     maisonImageView.setFitWidth(30);
     maisonImageView.setFitHeight(30);
     this.boutonMaison = new Button();
     this.boutonMaison.setGraphic(maisonImageView);
+
+    ensembleBouton.getChildren().addAll(this.boutonParametres, this.boutonMaison);
+
+    banniere.setLeft(titre);
+    banniere.setRight(ensembleBouton);
 
     return banniere;
 }
