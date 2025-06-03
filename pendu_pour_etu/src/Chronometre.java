@@ -45,26 +45,41 @@ public class Chronometre extends Text{
      */
     public void setTime(long tempsMillisec){
         // A implémenter
+        long secondes = tempsMillisec / 1000;
+        long minutes = secondes / 60;
+        secondes = secondes % 60;
+        this.setText(String.format("%d:%02d", minutes, secondes));
+        this.setFont(Font.font("Arial", 20));
+        this.setTextAlignment(TextAlignment.CENTER);
+
     }
 
     /**
      * Permet de démarrer le chronomètre
      */
     public void start(){
-        // A implémenter
+        if (this.timeline.getStatus() != Animation.Status.RUNNING) {
+            this.timeline.play();
+        }
     }
 
     /**
      * Permet d'arrêter le chronomètre
      */
     public void stop(){
-        // A implémenter
+        if (this.timeline.getStatus() == Animation.Status.RUNNING) {
+            this.timeline.stop();
+        }
     }
 
     /**
      * Permet de remettre le chronomètre à 0
      */
-    public void resetTime(){
-        // A implémenter
+
+        public void resetTime(){
+            this.stop();
+            this.actionTemps.reset();
+            this.setText("0:00");
+        }
     }
-}
+
