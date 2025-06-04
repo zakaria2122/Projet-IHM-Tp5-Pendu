@@ -21,7 +21,6 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
      * @param p vue du jeu
      */
     public ControleurLancerPartie(MotMystere modelePendu, Pendu vuePendu) {
-        // A implémenter
         this.modelePendu = modelePendu;
         this.vuePendu = vuePendu;
     }
@@ -32,15 +31,41 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-        // A implémenter
+        boolean partieEnCours = false;
+        
+        // Vérifier s'il y a une partie en cours
+        // Une partie est en cours si le jeu n'est ni gagné ni perdu et qu'il y a eu des essais
+        if (this.modelePendu.getNbEssais() > 0 && 
+            !this.modelePendu.gagne() && 
+            !this.modelePendu.perdu()) {
+            partieEnCours = true;
+        }
+        
+        if (partieEnCours) {
+            // Il y a une partie en cours, demander confirmation
+            Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait();
+            
+            // Si la réponse est oui, lancer une nouvelle partie
+            if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)) {
+                this.lancerNouvellePartie();
+            }
+            // Si la réponse est non, on ne fait rien (la partie continue)
+        } else {
+            // Aucune partie en cours, lancer directement une nouvelle partie
+            this.lancerNouvellePartie();
+        }
+    }
     
-        Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait(); // on lance la fenêtre popup et on attends la réponse
-        // si la réponse est oui
-        if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)){
-            System.out.println("Ok !");
-        }
-        else{
-            System.out.println("D'ac !");
-        }
+    /**
+     * Lance effectivement une nouvelle partie
+     */
+    private void lancerNouvellePartie() {
+        // Passer en mode jeu
+        this.vuePendu.modeJeu();
+        
+        // Lancer la partie
+        this.vuePendu.lancePartie();
+        
+        System.out.println("Nouvelle partie lancée !");
     }
 }

@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert;
 import java.util.Optional;
 
 /**
@@ -31,32 +32,23 @@ public class RetourAccueil implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-        boolean partieEnCours = false;
-        
         // Vérifier s'il y a une partie en cours
         // Une partie est en cours si le jeu n'est ni gagné ni perdu et qu'il y a eu des essais
         if (this.modelePendu.getNbEssais() > 0 && !this.modelePendu.gagne() && !this.modelePendu.perdu()) {
-            partieEnCours = true;
-        }
-        
-        boolean retournerAccueil = true;
-        
-        if (partieEnCours) {
-            Optional<ButtonType> reponse = this.vuePendu.popUpPartieEnCours().showAndWait();
+            // Utiliser le popup déjà existant dans la classe Pendu
+            Alert confirmation = this.vuePendu.popUpPartieEnCours();
             
-            // Si la réponse est "Non", on ne retourne pas à l'accueil
-            if (reponse.isPresent() && reponse.get().equals(ButtonType.NO)) {
-                retournerAccueil = false;
-            }
-        }
-        
-        if (retournerAccueil) {
-            // Arrêter le chronomètre s'il est en cours
-            if (this.vuePendu.getChrono() != null) {
-                this.vuePendu.getChrono().stop();
-            }
+            // Afficher la boîte de dialogue et attendre la réponse
+            Optional<ButtonType> resultat = confirmation.showAndWait();
             
-            // Retourner au mode accueil
+            // Si l'utilisateur confirme (clique sur "YES")
+            if (resultat.isPresent() && resultat.get() == ButtonType.YES) {
+                // Retourner à l'accueil
+                this.vuePendu.modeAccueil();
+            }
+            // Si l'utilisateur clique sur "NO", on ne fait rien (reste sur la partie)
+        } else {
+            // Aucune partie en cours, retourner directement à l'accueil
             this.vuePendu.modeAccueil();
         }
     }
