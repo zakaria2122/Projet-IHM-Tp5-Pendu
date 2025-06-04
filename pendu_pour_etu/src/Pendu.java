@@ -296,7 +296,9 @@ private Pane fenetreAccueil() {
 
     // Boutons
     Button boutonJouer = new Button("Lancer une Partie");
-    boutonJouer.setOnAction(e -> this.modeJeu());
+    boutonJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
+
+
     boutonJouer.setTooltip(new Tooltip("Commencer le jeu"));
 
 
@@ -318,6 +320,8 @@ private Pane fenetreAccueil() {
      * @param repertoire répertoire où se trouvent les images
      */
     private void chargerImages(String repertoire) {
+
+        repertoire = "/home/Zakaria/Documents/Ihm/Projet-IHM-Tp5-Pendu/pendu_pour_etu/img";
         for (int i = 0; i < this.modelePendu.getNbErreursMax() + 1; i++) {
             File file = new File(repertoire + "/pendu" + i + ".png");
             System.out.println(file.toURI().toString());
@@ -366,12 +370,9 @@ private Pane fenetreAccueil() {
             case MotMystere.DIFFICILE:
                 this.chrono.setTempsLimite(2); // 2 minutes
                 break;
-            default:
-                this.chrono.setTempsLimite(0); // Pas de limite
-                break;
+            
         }
 
-        this.chrono.resetTime();
         this.chrono.start();
         this.majAffichage();
     }

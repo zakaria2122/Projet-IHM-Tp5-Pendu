@@ -31,15 +31,11 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-        boolean partieEnCours = false;
-        
         // Vérifier s'il y a une partie en cours
         // Une partie est en cours si le jeu n'est ni gagné ni perdu et qu'il y a eu des essais
-        if (this.modelePendu.getNbEssais() > 0 && 
-            !this.modelePendu.gagne() && 
-            !this.modelePendu.perdu()) {
-            partieEnCours = true;
-        }
+        boolean partieEnCours = this.modelePendu.getNbEssais() > 0 && 
+                               !this.modelePendu.gagne() && 
+                               !this.modelePendu.perdu();
         
         if (partieEnCours) {
             // Il y a une partie en cours, demander confirmation
@@ -60,10 +56,10 @@ public class ControleurLancerPartie implements EventHandler<ActionEvent> {
      * Lance effectivement une nouvelle partie
      */
     private void lancerNouvellePartie() {
-        // Passer en mode jeu
+        // D'abord passer en mode jeu
         this.vuePendu.modeJeu();
         
-        // Lancer la partie
+        // Puis lancer la partie (cela configure le chrono et démarre)
         this.vuePendu.lancePartie();
         
         System.out.println("Nouvelle partie lancée !");

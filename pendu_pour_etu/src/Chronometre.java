@@ -55,11 +55,11 @@ public class Chronometre extends Text{
      */
     public void setTempsLimite(int tempsLimiteMinutes) {
         if (tempsLimiteMinutes > 0) {
-            this.tempsLimite = tempsLimiteMinutes * 60 * 1000L; // Conversion en millisecondes
+            // Conversion avec Duration
+            this.tempsLimite = (long) Duration.minutes(tempsLimiteMinutes).toMillis();
             this.modeDecompte = true;
             
-            // Affichage initial du temps limite
-            this.setTime(this.tempsLimite);
+            this.setText(String.format("%d:%02d", tempsLimiteMinutes, 0));
             this.setFill(Color.BLACK);
         } else {
             this.tempsLimite = 0;
@@ -71,16 +71,13 @@ public class Chronometre extends Text{
 
     /**
      * Permet au controleur de mettre à jour le text
-     * @param tempsMillisec la durée à afficher
+     * @param tempsMillisec la durée à afficher (temps écoulé depuis le début)
      */
     public void setTime(long tempsMillisec){
-        long secondes = tempsMillisec / 1000;
-        long minutes = secondes / 60;
-        secondes = secondes % 60;
-        
         if (this.modeDecompte) {
             // En mode décompte, on affiche le temps restant
             long tempsRestant = this.tempsLimite - tempsMillisec;
+            
             if (tempsRestant <= 0) {
                 this.setText("0:00");
                 this.setFill(Color.RED);
@@ -96,16 +93,19 @@ public class Chronometre extends Text{
             
             this.setText(String.format("%d:%02d", minutesRestantes, secondesRestantes));
             
-            // Changer la couleur si moins de 30 secondes
-            if (tempsRestant <= 30000) {
+            // Changer la couleur selon le temps restant
+            if (tempsRestant <= 30000) { // moins de 30 secondes
                 this.setFill(Color.RED);
-            } else if (tempsRestant <= 60000) {
+            } else if (tempsRestant <= 60000) { // moins de 1 minute
                 this.setFill(Color.ORANGE);
             } else {
                 this.setFill(Color.BLACK);
             }
         } else {
             // Mode normal : compte le temps écoulé
+            long secondes = tempsMillisec / 1000;
+            long minutes = secondes / 60;
+            secondes = secondes % 60;
             this.setText(String.format("%d:%02d", minutes, secondes));
             this.setFill(Color.BLACK);
         }
@@ -134,9 +134,14 @@ public class Chronometre extends Text{
     public void resetTime(){
         this.stop();
         this.actionTemps.reset();
+        
+        // CORRECTION: Réinitialiser l'affichage correctement selon le mode
         if (this.modeDecompte && this.tempsLimite > 0) {
-            this.setTime(0); // Cela affichera le temps limite
+            // Afficher le temps limite complet
+            long minutes = this.tempsLimite / (60 * 1000);
+            this.setText(String.format("%d:%02d", minutes, 0));
         } else {
+            // Mode normal, afficher 0:00
             this.setText("0:00");
         }
         this.setFill(Color.BLACK);

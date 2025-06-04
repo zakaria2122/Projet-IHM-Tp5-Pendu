@@ -30,7 +30,8 @@ public class ControleurChronometre implements EventHandler<ActionEvent> {
         this.tempsEcoule = 0;
         this.tempsPrec = System.currentTimeMillis();
         this.tempsEcouleNotifie = false;
-        this.chrono.setTime(0);
+        // SUPPRIME cette ligne qui causait le problème !
+        // this.chrono.setTime(0);
     }
 
     public long getTempsEcoule() {
