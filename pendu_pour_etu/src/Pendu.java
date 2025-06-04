@@ -1,7 +1,5 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,19 +7,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.stage.Stage;
 
-import java.util.List;
-import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Vue du jeu du pendu
  */
 public class Pendu extends Application {
+    
+    // ==================== ATTRIBUTS DU MODÈLE ====================
     /**
      * modèle du jeu
      **/
@@ -35,6 +35,7 @@ public class Pendu extends Application {
      */
     public List<String> niveaux;
 
+    // ==================== COMPOSANTS D'AFFICHAGE ====================
     // les différents contrôles qui seront mis à jour ou consultés pour l'affichage
     /**
      * le dessin du pendu
@@ -64,6 +65,8 @@ public class Pendu extends Application {
      * le panel Central qui pourra être modifié selon le mode (accueil ou jeu)
      */
     private BorderPane panelCentral;
+
+    // ==================== BOUTONS DE CONTRÔLE ====================
     /**
      * le bouton Paramètre / Engrenage
      */
@@ -81,11 +84,13 @@ public class Pendu extends Application {
      */
     private Button bJouer;
 
+    // ==================== COMPOSANTS D'ACCUEIL ====================
     /**
      * le choix de niveau dans la fenêtre d'accueil
      */
     private ComboBox<String> choixNiveau;
 
+    // ==================== INITIALISATION ====================
     /**
      * initialise les attributs (créer le modèle, charge les images, crée le chrono
      * ...)
@@ -100,12 +105,12 @@ public class Pendu extends Application {
 
         this.dessin = new ImageView();
         this.dessin.setImage(this.lesImages.get(0));
-        this.dessin.setFitWidth(300);
-        this.dessin.setFitHeight(300);
+        this.dessin.setFitWidth(400);
+        this.dessin.setFitHeight(500);
         this.dessin.setPreserveRatio(true);
 
         this.motCrypte = new Text();
-        this.motCrypte.setFont(new Font("Arial", 25));
+        this.motCrypte.setFont(new Font("Arial", 50));
 
         this.pg = new ProgressBar();
         this.pg.setPrefWidth(300);
@@ -124,6 +129,7 @@ public class Pendu extends Application {
         this.choixNiveau.setValue("Facile");
     }
 
+    // ==================== CONSTRUCTION DE LA SCÈNE ====================
     /**
      * @return le graphe de scène de la vue à partir de methodes précédantes
      */
@@ -143,6 +149,7 @@ public class Pendu extends Application {
         titre.setTextFill(Color.DARKBLUE);
         titre.setAlignment(Pos.TOP_LEFT);
         titre.setPadding(new Insets(10));
+        
         HBox ensembleBouton = new HBox();
         BorderPane banniere = new BorderPane();
         banniere.setPadding(new Insets(20));
@@ -191,6 +198,7 @@ public class Pendu extends Application {
         return panelChrono;
     }
 
+    // ==================== FENÊTRES PRINCIPALES ====================
     /**
      * @return la fenêtre de jeu avec le mot crypté, l'image, la barre
      *         de progression et le clavier
@@ -199,28 +207,64 @@ public class Pendu extends Application {
         BorderPane jeu = new BorderPane();
         jeu.setPadding(new Insets(20));
 
-        // Panel du haut avec le niveau et le chronomètre
-        HBox haut = new HBox(20);
-        haut.setAlignment(Pos.CENTER);
-        haut.getChildren().addAll(this.leNiveau, this.leChrono());
+        // Panel du haut avec le mot crypté
+        HBox haut = new HBox();
+        haut.setAlignment(Pos.TOP_LEFT);
+        haut.getChildren().add(this.motCrypte);
+        haut.setPadding(new Insets(10, 0, 10, 50));
 
-        // Panel central avec l'image et le mot crypté
-        VBox centre = new VBox(20);
-        centre.setAlignment(Pos.CENTER);
-        centre.getChildren().addAll(this.dessin, this.motCrypte, this.pg);
+        // Panel central principal
+        HBox imgGauche = new HBox(30);
+        imgGauche.setAlignment(Pos.TOP_LEFT);
+
+        //Panel de droite pour les infos
+        VBox droite = new VBox(15);
+        droite.setAlignment(Pos.TOP_LEFT);
+        droite.setPadding(new Insets(20));
+
+        // ========== PARTIE GAUCHE : IMAGE + BARRE ==========
+        VBox imageEtBarre = new VBox(15);
+        imageEtBarre.setAlignment(Pos.CENTER);
+        imageEtBarre.setPrefWidth(400); // CORRECTION: 400 au lieu de 30 !
+
+        // Image du pendu dans un cadre (comme sur le screenshot)
+        imageEtBarre.getChildren().add(this.dessin);
+
+        // AMÉLIORATION: Configuration de la barre de progression
+        this.pg.setPrefWidth(300);  // Largeur fixe pour la barre
+        this.pg.setPrefHeight(20);  // Hauteur pour qu'elle soit visible
+        this.pg.setStyle("-fx-accent: blue;"); // Couleur bleue comme sur le screenshot
+
+        // Barre de progression sous l'image
+        imageEtBarre.getChildren().add(this.pg);
+
+        // ========== PARTIE DROITE : INFOS ==========
+        VBox infosJeu = new VBox(15);
+        infosJeu.setAlignment(Pos.TOP_LEFT);
+
+        // Niveau
+        infosJeu.getChildren().add(this.leNiveau);
+
+        // Chronomètre
+        infosJeu.getChildren().add(this.leChrono());
+
+        // Bouton nouvelle partie
+        this.bJouer = new Button("Nouvelle Partie");
+        this.bJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
+        infosJeu.getChildren().add(this.bJouer);
+
+        imgGauche.getChildren().addAll(imageEtBarre);
+        droite.getChildren().addAll(infosJeu);
 
         // Panel du bas avec le clavier
         VBox bas = new VBox(10);
-        bas.setAlignment(Pos.CENTER);
+        bas.setAlignment(Pos.CENTER); // AMÉLIORATION: Centré pour le clavier
+        bas.setPadding(new Insets(20, 0, 0, 0)); // AMÉLIORATION: Padding simplifié
         bas.getChildren().add(this.clavier);
 
-        // Bouton pour nouvelle partie
-        this.bJouer = new Button("Nouvelle Partie");
-        this.bJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
-        bas.getChildren().add(this.bJouer);
-
         jeu.setTop(haut);
-        jeu.setCenter(centre);
+        jeu.setCenter(imgGauche);
+        jeu.setRight(droite);
         jeu.setBottom(bas);
 
         return jeu;
@@ -230,97 +274,80 @@ public class Pendu extends Application {
      * @return la fenêtre d'accueil sur laquelle on peut choisir les paramètres de
      *         jeu
      */
-private Pane fenetreAccueil() {
-    VBox accueil = new VBox(20);
-    accueil.setAlignment(Pos.TOP_LEFT);
-    accueil.setPadding(new Insets(20));
-
-    // Titre principal
-    Label titre = new Label("Pendu Zakaria");
-    titre.setFont(new Font("Arial", 26));
-
-    // Création du TitledPane pour les paramètres
-    TitledPane gameSettings = new TitledPane();
-    gameSettings.setText("Niveau de Difficulté");
-    gameSettings.setCollapsible(true);
-    gameSettings.setExpanded(true);
-
-    // Conteneur pour les RadioButtons
-    VBox contenuSettings = new VBox(10);
-    contenuSettings.setPadding(new Insets(15));
-
-    // Création du ToggleGroup (pour qu'un seul soit sélectionné)
-    ToggleGroup groupeNiveau = new ToggleGroup();
-
-    // Création des RadioButtons
-    RadioButton radioFacile = new RadioButton("Facile");
-    radioFacile.setToggleGroup(groupeNiveau);
-    radioFacile.setSelected(true); // Sélectionné par défaut
-
-    RadioButton radioMoyen = new RadioButton("Moyen");
-    radioMoyen.setToggleGroup(groupeNiveau);
-
-    RadioButton radioDifficile = new RadioButton("Difficile");
-    radioDifficile.setToggleGroup(groupeNiveau);
-
-    // Ajout d'info-bulles (recommandation WIMP)
-    radioFacile.setTooltip(new Tooltip("Mots simples"));
-    radioMoyen.setTooltip(new Tooltip("Mots moyens"));
-    radioDifficile.setTooltip(new Tooltip("Mots difficiles"));
-
-    // Gestionnaire d'événements pour les RadioButtons
-    groupeNiveau.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-        if (newVal != null) {
-            RadioButton selected = (RadioButton) newVal;
-            String niveau = selected.getText();
-            
-            switch (niveau) {
-                case "Facile":
-                    this.modelePendu.setNiveau(MotMystere.FACILE);
-                    break;
-                case "Moyen":
-                    this.modelePendu.setNiveau(MotMystere.MOYEN);
-                    break;
-                case "Difficile":
-                    this.modelePendu.setNiveau(MotMystere.DIFFICILE);
-                    break;
-            }
-        }
-    });
-
-    // Ajout des RadioButtons au conteneur
-    contenuSettings.getChildren().addAll(radioFacile, radioMoyen, radioDifficile);
+    private Pane fenetreAccueil() {
+        VBox accueil = new VBox(20);
+        accueil.setAlignment(Pos.TOP_LEFT);
+        accueil.setPadding(new Insets(20));
     
-    // Définir le contenu du TitledPane
-    gameSettings.setContent(contenuSettings);
+        // Titre principal
+        Label titre = new Label("Pendu Zakaria");
+        titre.setFont(new Font("Arial", 26));
+    
+        // Création du TitledPane pour les paramètres
+        TitledPane parametreJeu = new TitledPane();
+        parametreJeu.setText("Niveau de Difficulté");
+        parametreJeu.setCollapsible(true);
+        parametreJeu.setExpanded(true);
+    
+        // Conteneur pour les RadioButtons
+        VBox parametreContenu = new VBox(10);
+        parametreContenu.setPadding(new Insets(15));
+    
+        // Création du ToggleGroup (pour qu'un seul soit sélectionné)
+        ToggleGroup groupeNiveau = new ToggleGroup();
+    
+        // Création du contrôleur de niveau
+        ControleurNiveau controleurNiveau = new ControleurNiveau(this.modelePendu);
+    
+        // Création des RadioButtons
+        RadioButton radioFacile = new RadioButton("Facile");
+        radioFacile.setToggleGroup(groupeNiveau);
+        radioFacile.setSelected(true); // Sélectionné par défaut
+        radioFacile.setOnAction(controleurNiveau);
+    
+        RadioButton radioMoyen = new RadioButton("Moyen");
+        radioMoyen.setToggleGroup(groupeNiveau);
+        radioMoyen.setOnAction(controleurNiveau);
+    
+        RadioButton radioDifficile = new RadioButton("Difficile");
+        radioDifficile.setToggleGroup(groupeNiveau);
+        radioDifficile.setOnAction(controleurNiveau);
+    
+        // Ajout d'info-bulles (recommandation WIMP)
+        radioFacile.setTooltip(new Tooltip("Mots simples"));
+        radioMoyen.setTooltip(new Tooltip("Mots moyens"));
+        radioDifficile.setTooltip(new Tooltip("Mots difficiles"));
+    
+        // Ajout des RadioButtons au conteneur
+        parametreContenu.getChildren().addAll(radioFacile, radioMoyen, radioDifficile);
+    
+        // Définir le contenu du TitledPane
+        parametreJeu.setContent(parametreContenu);
+    
+        // Boutons
+        Button boutonJouer = new Button("Lancer une Partie");
+        boutonJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
+    
+        boutonJouer.setTooltip(new Tooltip("Commencer le jeu"));
+    
+        // Conteneur pour les boutons
+        HBox boutons = new HBox(15);
+        boutons.setAlignment(Pos.CENTER);
+        boutons.getChildren().addAll(boutonJouer);
+    
+        // Assemblage final
+        accueil.getChildren().addAll(titre, parametreJeu, boutons);
+    
+        return accueil;
+    }
 
-    // Boutons
-    Button boutonJouer = new Button("Lancer une Partie");
-    boutonJouer.setOnAction(new ControleurLancerPartie(this.modelePendu, this));
-
-
-    boutonJouer.setTooltip(new Tooltip("Commencer le jeu"));
-
-
-    // Conteneur pour les boutons
-    HBox boutons = new HBox(15);
-    boutons.setAlignment(Pos.CENTER);
-    boutons.getChildren().addAll(boutonJouer);
-
-    // Assemblage final
-    accueil.getChildren().addAll(titre, gameSettings, boutons);
-
-    return accueil;
-}
-
-
+    // ==================== GESTION DES IMAGES ====================
     /**
      * charge les images à afficher en fonction des erreurs
      * 
      * @param repertoire répertoire où se trouvent les images
      */
     private void chargerImages(String repertoire) {
-
         repertoire = "/home/Zakaria/Documents/Ihm/Projet-IHM-Tp5-Pendu/pendu_pour_etu/img";
         for (int i = 0; i < this.modelePendu.getNbErreursMax() + 1; i++) {
             File file = new File(repertoire + "/pendu" + i + ".png");
@@ -329,6 +356,7 @@ private Pane fenetreAccueil() {
         }
     }
 
+    // ==================== MODES DE JEU ====================
     public void modeAccueil() {
         this.panelCentral.setCenter(this.fenetreAccueil());
         this.chrono.stop(); // Arrêter le chronomètre si une partie était en cours
@@ -339,11 +367,11 @@ private Pane fenetreAccueil() {
 
     public void modeJeu(){
         this.panelCentral.setCenter(this.fenetreJeu());
-        
+
         // Activer le bouton Home et griser le bouton Paramètres en mode jeu
         this.boutonMaison.setDisable(false);
         this.boutonParametres.setDisable(true);
-        
+
         // Démarrer le chronomètre
         this.chrono.start();
     }
@@ -354,6 +382,7 @@ private Pane fenetreAccueil() {
         this.modeAccueil();
     }
 
+    // ==================== LOGIQUE DE JEU ====================
     /** lance une partie */
     public void lancePartie() {
         this.modelePendu.setMotATrouver();
@@ -370,7 +399,6 @@ private Pane fenetreAccueil() {
             case MotMystere.DIFFICILE:
                 this.chrono.setTempsLimite(2); // 2 minutes
                 break;
-            
         }
 
         this.chrono.start();
@@ -406,9 +434,9 @@ private Pane fenetreAccueil() {
 
         // Désactiver les lettres déjà essayées
         this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
-        
     }
 
+    // ==================== ACCESSEURS ====================
     /**
      * accesseur du chronomètre (pour les controleur du jeu)
      * 
@@ -418,6 +446,7 @@ private Pane fenetreAccueil() {
         return this.chrono;
     }
 
+    // ==================== POPUPS ====================
     public Alert popUpPartieEnCours() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "La partie est en cours!\n Etes-vous sûr de l'interrompre ?", ButtonType.YES, ButtonType.NO);
@@ -465,6 +494,7 @@ private Pane fenetreAccueil() {
         return alert;
     }
 
+    // ==================== POINT D'ENTRÉE ====================
     /**
      * créer le graphe de scène et lance le jeu
      * 
