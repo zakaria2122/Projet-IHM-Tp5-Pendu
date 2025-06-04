@@ -5,57 +5,46 @@ import javafx.event.EventHandler;
  * Contrôleur du chronomètre
  */
 public class ControleurChronometre implements EventHandler<ActionEvent> {
-    /**
-     * temps enregistré lors du dernier événement
-     */
     private long tempsPrec;
-    /**
-     * temps écoulé depuis le début de la mesure
-     */
     private long tempsEcoule;
-    /**
-     * Vue du chronomètre
-     */
     private Chronometre chrono;
+    private boolean tempsEcouleNotifie = false;
 
-    /**
-     * Constructeur du contrôleur du chronomètre
-     * noter que le modèle du chronomètre est tellement simple
-     * qu'il est inclus dans le contrôleur
-     * @param chrono Vue du chronomètre
-     */
     public ControleurChronometre (Chronometre chrono){
-        // A implémenter
         this.tempsPrec = System.currentTimeMillis();
         this.tempsEcoule = 0;
         this.chrono = chrono;
-
+        this.tempsEcouleNotifie = false;
     }
 
-    /**
-     * Actions à effectuer tous les pas de temps
-     * essentiellement mesurer le temps écoulé depuis la dernière mesure
-     * et mise à jour de la durée totale
-     * @param actionEvent événement Action
-     */
     @Override
     public void handle(ActionEvent actionEvent) {
-        // A implémenter
         long instantT = System.currentTimeMillis();
         long diff = instantT - this.tempsPrec;
         this.tempsEcoule += diff;
         this.tempsPrec = instantT;
         this.chrono.setTime(this.tempsEcoule);
-        
+    }
 
+    public void reset(){
+        this.tempsEcoule = 0;
+        this.tempsPrec = System.currentTimeMillis();
+        this.tempsEcouleNotifie = false;
+        this.chrono.setTime(0);
+    }
+
+    public long getTempsEcoule() {
+        return this.tempsEcoule;
     }
 
     /**
-     * Remet la durée à 0
+     * Appelé quand le temps limite est atteint
      */
-    public void reset(){
-        // A implémenter
-        this.tempsEcoule = 0;
-        this.tempsEcoule = System.currentTimeMillis();
+    public void tempsEcoule() {
+        if (!this.tempsEcouleNotifie) {
+            this.tempsEcouleNotifie = true;
+            // Ici on pourrait notifier la vue principale que le temps est écoulé
+            System.out.println("Temps écoulé !");
+        }
     }
 }

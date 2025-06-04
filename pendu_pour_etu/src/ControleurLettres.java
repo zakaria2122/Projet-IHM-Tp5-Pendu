@@ -33,7 +33,7 @@ public class ControleurLettres implements EventHandler<ActionEvent> {
      */
     @Override
     public void handle(ActionEvent actionEvent) {
-        // A implémenter
+        
 
         Button boutonCliquer = (Button) actionEvent.getSource();
         String lettreChoix = boutonCliquer.getText();
