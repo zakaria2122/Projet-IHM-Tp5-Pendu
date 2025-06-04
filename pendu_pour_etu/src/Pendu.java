@@ -313,10 +313,6 @@ public class Pendu extends Application {
         radioDifficile.setToggleGroup(groupeNiveau);
         radioDifficile.setOnAction(controleurNiveau);
     
-        // Ajout d'info-bulles (recommandation WIMP)
-        radioFacile.setTooltip(new Tooltip("Mots simples"));
-        radioMoyen.setTooltip(new Tooltip("Mots moyens"));
-        radioDifficile.setTooltip(new Tooltip("Mots difficiles"));
     
         // Ajout des RadioButtons au conteneur
         parametreContenu.getChildren().addAll(radioFacile, radioMoyen, radioDifficile);
@@ -463,9 +459,9 @@ public class Pendu extends Application {
                 "- Chaque mauvaise lettre dessine une partie du pendu\n" +
                 "- Trouvez le mot avant que le dessin soit terminé !\n\n" +
                 "Niveaux :\n" +
-                "- Facile : première et dernière lettres révélées\n" +
-                "- Moyen : première lettre révélée\n" +
-                "- Difficile : aucune lettre révélée");
+                "- Facile : première et dernière lettres révélées et vous avez jusqu'a 4 minutes \n" +
+                "- Moyen : première lettre révélée et vous avez jusqu'a 3 minutes\n" +
+                "- Difficile : aucune lettre révélée et vous avez jusqu'a 2 minutes");
         return alert;
     }
 
