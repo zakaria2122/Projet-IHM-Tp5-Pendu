@@ -57,6 +57,7 @@ public class Chronometre extends Text{
         if (tempsLimiteMinutes > 0) {
             this.tempsLimite = tempsLimiteMinutes * 60 * 1000L; // Conversion en millisecondes
             this.modeDecompte = true;
+            
             // Affichage initial du temps limite
             this.setTime(this.tempsLimite);
             this.setFill(Color.BLACK);

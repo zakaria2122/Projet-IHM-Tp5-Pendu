@@ -327,15 +327,27 @@ private Pane fenetreAccueil() {
 
     public void modeAccueil() {
         this.panelCentral.setCenter(this.fenetreAccueil());
+        this.chrono.stop(); // Arrêter le chronomètre si une partie était en cours
+        this.chrono.resetTime(); // Réinitialiser le chronomètre
+        this.motCrypte.setText(""); // Réinitialiser le mot crypté
+        this.dessin.setImage(this.lesImages.get(0)); // Réinitialiser l'image du pendu
     }
 
-    public void modeJeu() {
+    public void modeJeu(){
         this.panelCentral.setCenter(this.fenetreJeu());
-        this.lancePartie();
+        
+        // Activer le bouton Home et griser le bouton Paramètres en mode jeu
+        this.boutonMaison.setDisable(false);
+        this.boutonParametres.setDisable(true);
+        
+        // Démarrer le chronomètre
+        this.chrono.start();
     }
 
-    public void modeParametres() {
-
+    public void modeParametres(){
+        // À implémenter selon les besoins
+        // Pour l'instant, on reste en mode accueil
+        this.modeAccueil();
     }
 
     /** lance une partie */
@@ -393,6 +405,7 @@ private Pane fenetreAccueil() {
 
         // Désactiver les lettres déjà essayées
         this.clavier.desactiveTouches(this.modelePendu.getLettresEssayees());
+        
     }
 
     /**
