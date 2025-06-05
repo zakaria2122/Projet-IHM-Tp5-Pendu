@@ -19,10 +19,9 @@ public class Clavier extends VBox {
      */
     public Clavier(String lettres, EventHandler<ActionEvent> controleur) {
 
-        
         // J'initialise ma liste de boutons
         this.boutons = new ArrayList<>();
-        
+
         // J'espaces les lignes de 10 pixels
         this.setSpacing(10);
 
@@ -37,9 +36,17 @@ public class Clavier extends VBox {
             char lettre = lettres.charAt(i);
             Button nouveauBouton = new Button();
             nouveauBouton.setText(String.valueOf(lettre));
-            nouveauBouton.setPrefSize(50, 30);
             nouveauBouton.setOnAction(controleur);
-            
+            nouveauBouton.setStyle(
+                    "-fx-background-radius: 110;" + 
+                            "-fx-border-radius: 110;" + 
+                            "-fx-background-color: linear-gradient(#f2f2f2, #d6d6d6);" + 
+                            "-fx-border-color: gray;" + 
+                            "-fx-border-width: 1;" +
+                            "-fx-font-size: 12px;" + 
+                            "-fx-min-width: 50px;" + 
+                            "-fx-min-height: 5px;");
+
             premiereRangee.getChildren().add(nouveauBouton);
             this.boutons.add(nouveauBouton);
         }
@@ -50,9 +57,18 @@ public class Clavier extends VBox {
             char lettre = lettres.charAt(i);
             Button nouveauBouton = new Button();
             nouveauBouton.setText(String.valueOf(lettre));
-            nouveauBouton.setPrefSize(50, 30);
+         
             nouveauBouton.setOnAction(controleur);
-            
+            nouveauBouton.setStyle(
+                    "-fx-background-radius: 110;" + 
+                            "-fx-border-radius: 110;" + 
+                            "-fx-background-color: linear-gradient(#f2f2f2, #d6d6d6);" + 
+                            "-fx-border-color: gray;" + 
+                            "-fx-border-width: 1;" +
+                            "-fx-font-size: 12px;" + 
+                            "-fx-min-width: 50px;" + 
+                            "-fx-min-height: 5px;");
+
             deuxiemeRangee.getChildren().add(nouveauBouton);
             this.boutons.add(nouveauBouton);
         }
@@ -63,9 +79,17 @@ public class Clavier extends VBox {
             char lettre = lettres.charAt(i);
             Button nouveauBouton = new Button();
             nouveauBouton.setText(String.valueOf(lettre));
-            nouveauBouton.setPrefSize(50, 30);
             nouveauBouton.setOnAction(controleur);
-            
+            nouveauBouton.setStyle(
+                    "-fx-background-radius: 110;" + 
+                            "-fx-border-radius: 110;" + 
+                            "-fx-background-color: linear-gradient(#f2f2f2, #d6d6d6);" + 
+                            "-fx-border-color: gray;" + 
+                            "-fx-border-width: 1;" +
+                            "-fx-font-size: 12px;" + 
+                            "-fx-min-width: 50px;" + 
+                            "-fx-min-height: 5px;");
+
             troisiemeRangee.getChildren().add(nouveauBouton);
             this.boutons.add(nouveauBouton);
         }
@@ -76,9 +100,18 @@ public class Clavier extends VBox {
             char lettre = lettres.charAt(i);
             Button nouveauBouton = new Button();
             nouveauBouton.setText(String.valueOf(lettre));
-            nouveauBouton.setPrefSize(50, 30);
+
             nouveauBouton.setOnAction(controleur);
-            
+            nouveauBouton.setStyle(
+                    "-fx-background-radius: 110;" + 
+                            "-fx-border-radius: 110;" + 
+                            "-fx-background-color: linear-gradient(#f2f2f2, #d6d6d6);" + 
+                            "-fx-border-color: gray;" + 
+                            "-fx-border-width: 1;" +
+                            "-fx-font-size: 12px;" + 
+                            "-fx-min-width: 50px;" + 
+                            "-fx-min-height: 5px;");
+
             quatriemeRangee.getChildren().add(nouveauBouton);
             this.boutons.add(nouveauBouton);
         }
@@ -99,7 +132,7 @@ public class Clavier extends VBox {
         for (int i = 0; i < this.boutons.size(); i++) {
             Button monBouton = this.boutons.get(i);
             String laLettre = monBouton.getText();
-            
+
             // Si la lettre a été utilisée, je désactive le bouton
             if (lettresUtilisees.contains(laLettre)) {
                 monBouton.setDisable(true);
