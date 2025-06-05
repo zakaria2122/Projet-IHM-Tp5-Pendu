@@ -1,76 +1,110 @@
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.TilePane;
-import javafx.scene.shape.Circle;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Génère la vue d'un clavier et associe le contrôleur aux touches
- * le choix ici est d'un faire un héritié d'un TilePane
+ * Clavier pour le jeu du pendu
  */
-public class Clavier extends TilePane {
-    /**
-     * il est conseillé de stocker les touches dans un ArrayList
-     */
-    private List<Button> clavier;
+public class Clavier extends VBox {
+
+    private List<Button> boutons;
 
     /**
-     * constructeur du clavier
-     * @param touches une chaine de caractères qui contient les lettres à mettre sur les touches
-     * @param actionTouches le contrôleur des touches
+     * Constructeur du clavier
      */
-    public Clavier(String touches, EventHandler<ActionEvent> actionTouches) {
-        super();
+    public Clavier(String lettres, EventHandler<ActionEvent> controleur) {
+
         
-        // Configuration du TilePane
-        this.setPrefColumns(7); // 7 colonnes pour un beau rendu
-        this.setHgap(5);
-        this.setVgap(5);
-        this.setPadding(new Insets(10));
-        this.setAlignment(Pos.CENTER);
+        // J'initialise ma liste de boutons
+        this.boutons = new ArrayList<>();
         
-        // Initialisation de la liste des boutons
-        this.clavier = new ArrayList<>();
-        
-        // Création des boutons pour chaque lettre
-        for (int i = 0; i < touches.length(); i++) {
-            char lettre = touches.charAt(i);
-            Button bouton = new Button(String.valueOf(lettre));
+        // J'espaces les lignes de 10 pixels
+        this.setSpacing(10);
+
+        // Je crée 4 lignes de boutons
+        HBox premiereRangee = new HBox();
+        HBox deuxiemeRangee = new HBox();
+        HBox troisiemeRangee = new HBox();
+        HBox quatriemeRangee = new HBox();
+
+        // Première rangée : lettres A à H (8 lettres)
+        for (int i = 0; i < 8; i++) {
+            char lettre = lettres.charAt(i);
+            Button nouveauBouton = new Button();
+            nouveauBouton.setText(String.valueOf(lettre));
+            nouveauBouton.setPrefSize(50, 30);
+            nouveauBouton.setOnAction(controleur);
             
-            // Style du bouton
-            bouton.setPrefSize(50, 50);
-            bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-            
-            // Association du contrôleur
-            bouton.setOnAction(actionTouches);
-            
-            // Ajout à la liste et au TilePane
-            this.clavier.add(bouton);
-            this.getChildren().add(bouton);
+            premiereRangee.getChildren().add(nouveauBouton);
+            this.boutons.add(nouveauBouton);
         }
+        premiereRangee.setSpacing(5);
+
+        // Deuxième rangée : lettres I à P (8 lettres)
+        for (int i = 8; i < 16; i++) {
+            char lettre = lettres.charAt(i);
+            Button nouveauBouton = new Button();
+            nouveauBouton.setText(String.valueOf(lettre));
+            nouveauBouton.setPrefSize(50, 30);
+            nouveauBouton.setOnAction(controleur);
+            
+            deuxiemeRangee.getChildren().add(nouveauBouton);
+            this.boutons.add(nouveauBouton);
+        }
+        deuxiemeRangee.setSpacing(5);
+
+        // Troisième rangée : lettres Q à X (8 lettres)
+        for (int i = 16; i < 24; i++) {
+            char lettre = lettres.charAt(i);
+            Button nouveauBouton = new Button();
+            nouveauBouton.setText(String.valueOf(lettre));
+            nouveauBouton.setPrefSize(50, 30);
+            nouveauBouton.setOnAction(controleur);
+            
+            troisiemeRangee.getChildren().add(nouveauBouton);
+            this.boutons.add(nouveauBouton);
+        }
+        troisiemeRangee.setSpacing(5);
+
+        // Quatrième rangée : lettres Y et Z (2 lettres)
+        for (int i = 24; i < lettres.length(); i++) {
+            char lettre = lettres.charAt(i);
+            Button nouveauBouton = new Button();
+            nouveauBouton.setText(String.valueOf(lettre));
+            nouveauBouton.setPrefSize(50, 30);
+            nouveauBouton.setOnAction(controleur);
+            
+            quatriemeRangee.getChildren().add(nouveauBouton);
+            this.boutons.add(nouveauBouton);
+        }
+        quatriemeRangee.setSpacing(5);
+
+        // J'ajoute toutes mes rangées au clavier
+        this.getChildren().add(premiereRangee);
+        this.getChildren().add(deuxiemeRangee);
+        this.getChildren().add(troisiemeRangee);
+        this.getChildren().add(quatriemeRangee);
     }
 
     /**
-     * permet de désactiver certaines touches du clavier (et active les autres)
-     * @param touchesDesactivees une chaine de caractères contenant la liste des touches désactivées
+     * Désactive les touches utilisées
      */
-    public void desactiveTouches(Set<String> touchesDesactivees) {
-        for (Button bouton : this.clavier) {
-            String texteBouton = bouton.getText();
+    public void desactiveTouches(Set<String> lettresUtilisees) {
+        // Je parcours tous mes boutons
+        for (int i = 0; i < this.boutons.size(); i++) {
+            Button monBouton = this.boutons.get(i);
+            String laLettre = monBouton.getText();
             
-            if (touchesDesactivees.contains(texteBouton)) {
-                // Désactiver et griser le bouton
-                bouton.setDisable(true);
-                bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #cccccc; -fx-text-fill: #666666;");
+            // Si la lettre a été utilisée, je désactive le bouton
+            if (lettresUtilisees.contains(laLettre)) {
+                monBouton.setDisable(true);
             } else {
-                // Réactiver le bouton
-                bouton.setDisable(false);
-                bouton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+                monBouton.setDisable(false);
             }
         }
     }
