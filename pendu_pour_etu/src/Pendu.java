@@ -361,7 +361,7 @@ public class Pendu extends Application {
         this.pg.setProgress(progression);
 
         // Met à jour l'affichage du niveau
-        String[] niveauxTexte = { "Facile", "Moyen", "Difficile", "Expert" };
+        String[] niveauxTexte = { "Facile", "Moyen", "Difficile" };
         this.leNiveau.setText("Niveau : " + niveauxTexte[this.modelePendu.getNiveau()]);
 
         // Désactive les lettres déjà utilisées
